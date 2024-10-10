@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "moneyscope"
+version = "0.1.0"
+description = ""
+authors = ["Дмитрий Кукуйский <kukuiski@gmail.com>"]
+readme = "README.md"
+packages = [{include = "moneyscope", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+python-dotenv = "^1.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+mypy = "^1.11.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
