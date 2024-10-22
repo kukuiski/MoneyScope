@@ -36,7 +36,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit test / coverage report_files
 htmlcov/
 .tox/
 .nox/
@@ -180,3 +180,11 @@ Icon?
 # macOS-specific metadata files
 *.localized
 
+# Папка с отчётами
+report_files/
+
+# Папка с логами
+logs/
+
+# Временные файлы Excel
+~$*.*
