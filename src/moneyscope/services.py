@@ -5,14 +5,23 @@ import pandas as pd
 from moneyscope.logger_config import logger
 
 
-def top_3_cashback_categories(data: pd.DataFrame, year: int, month: int) -> str:
+def top_3_cashback_categories(data: list, year: int, month: int) -> str:
+    """Функция для анализа выгодности категорий повышенного кешбэка."""
     try:
-        if data.empty:
-            logger.warning("DataFrame пустой. Операции отсутствуют.")
+        if not data:
+            logger.warning("Список пуст. Операции отсутствуют.")
             return json.dumps({"error": "Нет данных для анализа кешбэка"}, ensure_ascii=False, indent=4)
 
-        # Преобразуем данные в DataFrame
-        df = data.copy()
+        # Преобразуем список словарей в DataFrame
+        df = pd.DataFrame(data)
+
+        # Преобразуем столбец "Дата операции" в формат datetime с дефисами
+        df["Дата операции"] = pd.to_datetime(df["Дата операции"], format="%Y-%m-%d %H:%M:%S", errors="coerce")
+
+        # Убедимся, что преобразование прошло успешно
+        if df["Дата операции"].isnull().any():
+            logger.error("Некорректные даты в данных операций.")
+            return json.dumps({"error": "Некорректные данные в поле 'Дата операции'"}, ensure_ascii=False, indent=4)
 
         # Фильтрация по году, месяцу (используем поле "Дата операции") и положительному кешбэку
         filtered_df = df[

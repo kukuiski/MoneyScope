@@ -1,4 +1,5 @@
 import pandas as pd
+
 from moneyscope.reports import spending_by_category
 
 
@@ -21,6 +22,7 @@ def test_spending_by_category_with_data(operations_data: pd.DataFrame) -> None:
 
     # Сравниваем DataFrame
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected_df)
+
 
 def test_spending_by_category_no_data_for_category(operations_data: pd.DataFrame) -> None:
     # Тест для категории, которая не присутствует в данных ("Одежда")

@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 from pathlib import Path
 from typing import Dict
 
@@ -156,3 +157,48 @@ def get_stock_prices() -> list:
             continue
 
     return prices
+
+
+def get_greeting() -> str:
+    # Получить текущее время
+    current_hour = datetime.now().hour
+
+    if 6 <= current_hour < 12:
+        greeting = "Доброе утро"
+    elif 12 <= current_hour < 18:
+        greeting = "Добрый день"
+    elif 18 <= current_hour < 22:
+        greeting = "Добрый вечер"
+    else:
+        greeting = "Доброй ночи"
+
+    return greeting
+
+
+def aggregate_card_data(df: pd.DataFrame) -> list:
+    """Получаем агрегированные (сводные) данные по картам:
+    последние 4 цифры карты; общая сумма расходов; кешбэк."""
+
+    # Убираем строки без номера карты
+    df = df.dropna(subset=["Номер карты"]).copy()
+
+    # Создаем новый столбец с последними 4 цифрами карты
+    df.loc[:, "last_digits"] = df["Номер карты"].str[-4:]
+
+    # Оставляем только расходы (минусовые операции)
+    df = df[df["Сумма операции"] < 0]
+
+    # Группируем по последним 4 цифрам карты и агрегируем данные
+    grouped_df = (
+        df.groupby("last_digits")
+        .agg(
+            total_spent=pd.NamedAgg(column="Сумма операции", aggfunc=lambda x: -x.sum()),
+            cashback=pd.NamedAgg(column="Кэшбэк", aggfunc="sum"),
+        )
+        .reset_index()
+    )
+
+    # Преобразуем результат в список словарей
+    result = grouped_df.to_dict(orient="records")
+
+    return result

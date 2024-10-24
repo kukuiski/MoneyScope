@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from unittest.mock import patch, mock_open
+
 
 # Фикстура для создания DataFrame с операциями
 @pytest.fixture
@@ -41,46 +41,20 @@ def empty_operations_data() -> pd.DataFrame:
     return pd.DataFrame()
 
 
-# Фикстура с данными операций, где есть кешбэк
 @pytest.fixture
-def cashback_operations_data() -> pd.DataFrame:
-    data = {
-        "Дата операции": [
-            "2021-12-30 16:44:00",
-            "2021-12-30 16:42:00",
-            "2021-12-30 16:39:00",
-            "2021-11-30 15:44:00",
-            "2021-10-30 01:23:00",
-        ],
-        "Категория": ["Супермаркеты", "Супермаркеты", "Аптеки", "Фастфуд", "Фастфуд"],
-        "Кэшбэк": [30, 25, 15, 50, 5],
-    }
-
-    df = pd.DataFrame(data)
-    df["Дата операции"] = pd.to_datetime(df["Дата операции"])
-
-    return df
+def operations_data_list() -> list:
+    return [
+        {"Дата операции": "2021-12-01 16:44:00", "Категория": "Супермаркеты", "Кэшбэк": 30, "Сумма операции": -100.0},
+        {"Дата операции": "2021-12-15 16:42:00", "Категория": "Супермаркеты", "Кэшбэк": 25, "Сумма операции": -200.0},
+        {"Дата операции": "2021-12-25 18:45:50", "Категория": "Аптеки", "Кэшбэк": 15, "Сумма операции": -50.0},
+        {"Дата операции": "2021-11-30 15:44:00", "Категория": "Фастфуд", "Кэшбэк": 50, "Сумма операции": -100.0},
+        {"Дата операции": "2021-10-30 01:23:00", "Категория": "Фастфуд", "Кэшбэк": 5, "Сумма операции": -20.0},
+    ]
 
 
-# Фикстура с данными транзакций
 @pytest.fixture
-def transactions_data() -> pd.DataFrame:
-    data = {
-        "Дата операции": [
-            "2021-12-30 16:44:00",
-            "2021-11-28 12:30:00",
-            "2021-10-15 18:45:00",
-            "2021-09-20 09:10:00",
-            "2021-08-25 11:20:00",
-        ],
-        "Категория": ["Супермаркеты", "Аптеки", "Фастфуд", "Супермаркеты", "Супермаркеты"],
-        "Сумма операции": [-160.89, -50.00, -200.00, -500.00, -75.00],
-    }
-
-    df = pd.DataFrame(data)
-    df["Дата операции"] = pd.to_datetime(df["Дата операции"])
-
-    return df
+def empty_operations_data_list() -> list:
+    return []
 
 
 # Фикстура для пустого DataFrame
@@ -88,17 +62,3 @@ def transactions_data() -> pd.DataFrame:
 def empty_transactions_data() -> pd.DataFrame:
     # Создаем пустой DataFrame с необходимыми столбцами
     return pd.DataFrame(columns=["Дата операции", "Категория", "Сумма операции", "Сумма платежа", "Описание"])
-
-
-# Фикстура для мока API-запросов
-@pytest.fixture
-def mock_requests_get():
-    with patch("requests.get") as mock_get:
-        yield mock_get
-
-
-# Фикстура для мока чтения JSON-файлов
-@pytest.fixture
-def mock_open_file(mocker):
-    mock_open_data = mock_open(read_data='{"user_currencies": ["USD"], "user_stocks": ["AAPL"]}')
-    mocker.patch("builtins.open", mock_open_data)

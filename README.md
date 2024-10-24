@@ -14,8 +14,7 @@
 ```python
 from moneyscope.views import get_main_page
 from moneyscope.utils import read_operations
-data = read_operations()
-response = get_main_page(data, "2021-12-31 16:44:00")
+response = get_main_page("2021-12-31 16:44:00")
 print(response)
 ```
 
@@ -32,7 +31,7 @@ print(top_categories)
 ```
 
 #### reports.py
-Отчёты по тратам по категориям. Функция `spending_by_category`.  
+Возвращает траты по заданной категории за последние три месяца от указанной даты.
 Декоратор `save_report_to_file` сохраняет результат в файл.
 
 Пример использования:
@@ -46,6 +45,7 @@ print(report)
 
 #### utils.py
 Загрузка и обработка транзакций. Функция `read_operations` загружает данные, преобразуя даты и фильтруя транзакции.
+Возвращает пустой DataFrame при возникновении ошибок.
 
 Пример использования:
 ```python

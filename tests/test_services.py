@@ -1,11 +1,11 @@
 import json
-import pandas as pd
+
 from moneyscope.services import top_3_cashback_categories
 
 
-def test_top_3_cashback_categories_with_data(cashback_operations_data: pd.DataFrame) -> None:
+def test_top_3_cashback_categories_with_data(operations_data_list: list) -> None:
     # Тест с данными
-    result = top_3_cashback_categories(cashback_operations_data, 2021, 12)
+    result = top_3_cashback_categories(operations_data_list, 2021, 12)
 
     # Проверяем, что результат — это валидный JSON
     parsed_result = json.loads(result)
@@ -20,9 +20,9 @@ def test_top_3_cashback_categories_with_data(cashback_operations_data: pd.DataFr
     assert parsed_result == expected_result
 
 
-def test_top_3_cashback_categories_no_data_for_month(cashback_operations_data: pd.DataFrame) -> None:
+def test_top_3_cashback_categories_no_data_for_month(operations_data_list: list) -> None:
     # Тест для месяца, в котором нет данных с кешбэком
-    result = top_3_cashback_categories(cashback_operations_data, 2021, 9)
+    result = top_3_cashback_categories(operations_data_list, 2021, 9)
 
     # Проверяем, что результат — это валидный JSON
     parsed_result = json.loads(result)
@@ -32,9 +32,9 @@ def test_top_3_cashback_categories_no_data_for_month(cashback_operations_data: p
     assert parsed_result["error"] == "Нет операций с кешбэком за 2021-9"
 
 
-def test_top_3_cashback_categories_with_empty_data(empty_operations_data: pd.DataFrame) -> None:
+def test_top_3_cashback_categories_with_empty_data(empty_operations_data_list: list) -> None:
     # Тест с пустыми данными
-    result = top_3_cashback_categories(empty_operations_data, 2021, 12)
+    result = top_3_cashback_categories(empty_operations_data_list, 2021, 12)
 
     # Проверяем, что результат — это валидный JSON
     parsed_result = json.loads(result)

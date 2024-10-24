@@ -5,10 +5,11 @@ from moneyscope.views import get_main_page
 
 
 def main() -> None:
-    # Эти строчки для тестирования созданных функций
+    """Основная функция для тестирования остальных"""
+    print(get_main_page("2021-12-31 16:44:00"))
     ops = read_operations()
-    print(get_main_page(ops, "2021-12-31 16:44:00"))
-    print(top_3_cashback_categories(ops, 2021, 12))
+    ops_dict = ops.to_dict(orient="records")
+    print(top_3_cashback_categories(ops_dict, 2021, 12))
     print(spending_by_category(ops, "Супермаркеты", "31.12.2021"))
     return None
 
